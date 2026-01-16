@@ -1,0 +1,12 @@
+name: Deploy App
+description: This action deploys the application to a specified environment.
+
+inputs:
+  environment:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - run: echo "Deploying application to ${{ inputs.environment }}"
+      shell: bash

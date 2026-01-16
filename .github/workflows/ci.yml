@@ -1,0 +1,59 @@
+name: CI Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: Target environment
+        default: dev
+        type: string
+      RUN_TESTS:
+        description: Run tests
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        uses: ./.github/actions/npm-install
+
+      - name: Build application
+        uses: ./.github/actions/npm-build
+
+      - name: Run tests
+        if: ${{ inputs.RUN_TESTS }}
+        uses: ./.github/actions/npm-test
+
+      - name: Deploy application
+        uses: ./.github/actions/deploy-app
+        with:
+          environment: ${{ inputs.ENV }}
+
+      - name: Pipeline completed
+        if: always()
+        uses: ./.github/actions/notify-status
+        with:
+          message: "Pipeline completed"
+
+      - name: Pipeline succeeded
+        if: success()
+        uses: ./.github/actions/notify-status
+        with:
+          message: "Pipeline succeeded"
+
+      - name: Pipeline failed
+        if: failure()
+        uses: ./.github/actions/notify-status
+        with:
+          message: "Pipeline failed"

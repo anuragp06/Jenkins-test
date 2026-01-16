@@ -1,0 +1,13 @@
+name: Setup Node.js
+description: Installs a specific version of Node.js
+
+inputs:
+  node-version:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}

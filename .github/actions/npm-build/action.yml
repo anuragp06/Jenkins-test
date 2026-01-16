@@ -1,0 +1,8 @@
+name: NPM Build
+description: Builds the npm application.
+
+runs:
+  using: composite
+  steps:
+    - run: echo "Building application"
+      shell: bash

@@ -1,0 +1,8 @@
+name: NPM Install
+description: Installs npm dependencies using npm ci
+
+runs:
+  using: composite
+  steps:
+    - run: echo "Installing dependencies (npm ci)"
+      shell: bash
